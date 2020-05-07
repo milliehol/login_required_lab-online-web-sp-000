@@ -1,23 +1,17 @@
 class SessionsController < ApplicationController
-  before_action :require_login
-   
   def new
   end
- 
-  def show
-    @document = Document.find(params[:id])
+  
+  def destroy
+  session.delete :name
+  redirect_to '/'
   end
- 
-  def index
-  end
- 
-  def create
-    @document = Document.create(author_id: user_id)
-  end
- 
-  private
- 
-  def require_login
-    return head(:forbidden) unless session.include? :user_id
-  end
+  
+   def create
+        return redirect_to(controller: 'sessions',
+                       action: 'new') if !params[:name] || params[:name].empty?
+                       
+        session[:name] = params[:name]
+        redirect_to '/'
+   end
 end
